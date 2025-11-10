@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import HabitCard from "./HabitCard"
 
 export function HabitList() {
-    const [habits, setHabits] = useState([{}])
+    const [habits, setHabits] = useState([])
     useEffect(() => {
         async function getHabits() {
             const res = await fetch("/api/habits");
@@ -16,7 +16,7 @@ export function HabitList() {
     return (
         <>
             {habits.map((habit) => (
-                <HabitCard key={habit.userId} habit={habit} />
+                <HabitCard habit={habit} />
             ))}
         </>
     )
