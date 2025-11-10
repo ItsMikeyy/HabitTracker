@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1762559745757,
+      "tag": "0000_bumpy_layla_miller",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1762744629451,
+      "tag": "0001_free_bloodstrike",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1762751223848,
+      "tag": "0002_flimsy_paladin",
+      "breakpoints": true
+    }
+  ]
+}
