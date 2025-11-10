@@ -21,5 +21,8 @@ export async function insertHabit(habit: Habit) {
 
 export async function getUserHabits(id: number) {
     const userHabits = await db.select().from(habits).where(eq(habits.userId, id))
+    if (userHabits.length === 0) {
+        return []
+    }
     return userHabits
 }
