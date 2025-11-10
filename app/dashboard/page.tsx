@@ -2,12 +2,14 @@ import { getUserSession } from "@/lib/session";
 import SignOutButton from "../components/buttons/SignOutButton";
 import HabitForm from "./components/HabitForm";
 import { HabitList } from "./components/HabitList";
+import { redirect } from "next/navigation";
 
 
 export default async function Dashboard() {
     const user = await getUserSession()
-
-//    console.log(user)
+    if (!user) {
+        redirect("/api/auth/signin")
+    }
     return (
         <div>
             {JSON.stringify(user)}
