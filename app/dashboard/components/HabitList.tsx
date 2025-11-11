@@ -1,7 +1,6 @@
 "use client"
 import { useEffect, useState } from "react"
-import HabitCard from "./HabitCard"
-
+import HabitRow from "./HabitRow"
 export function HabitList() {
     const [habits, setHabits] = useState([])
     useEffect(() => {
@@ -16,7 +15,7 @@ export function HabitList() {
     return (
         <>
             {habits.map((habit) => (
-                <HabitCard habit={habit} />
+                <HabitRow habit={habit} />
             ))}
         </>
     )

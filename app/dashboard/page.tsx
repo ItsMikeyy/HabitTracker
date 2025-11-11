@@ -1,10 +1,10 @@
 import { getUserSession } from "@/lib/session";
 import SignOutButton from "../components/buttons/SignOutButton";
 import HabitForm from "./components/HabitForm";
-import { HabitList } from "./components/HabitList";
 import { redirect } from "next/navigation";
-import { Table, TableCaption, TableHeader, TableBody, TableFooter, TableHead, TableRow, TableCell } from "@/components/ui/table";
-
+import HabitTable from "./components/HabitTable";
+import { getWeekRange } from "@/lib/date";
+import { Calendar } from "lucide-react";
 
 export default async function Dashboard() {
     const user = await getUserSession()
@@ -12,39 +12,46 @@ export default async function Dashboard() {
         redirect("/api/auth/signin")
     }
 
-    if (!user) {
-        redirect("/api/auth/signin")
-    }
+    const weekRange = getWeekRange()
+
     return (
-        <div>
-            {JSON.stringify(user)}
-            <SignOutButton />
-            <div className="flex flex-col items-center">
-                <h1 className="text-2xl font-bold">Habits</h1>
-                <div className="flex flex-col items-center">
-                <Table>
-                    <TableCaption>A list of your habits.</TableCaption>
-                    <TableHeader>
-                        <TableRow>
-                        <TableHead className="w-[100px]">Habit</TableHead>
-                        <TableHead>Sunday</TableHead>
-                        <TableHead>Monday</TableHead>
-                        <TableHead>Tuesday</TableHead>
-                        <TableHead>Wednesday</TableHead>
-                        <TableHead>Thursday</TableHead>
-                        <TableHead>Friday</TableHead>
-                        <TableHead>Saturday</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        
-                    </TableBody>
-                </Table>
-                    {/* <HabitList /> */}
+        <div className="min-h-screen bg-background">
+            {/* Header */}
+            <header className="border-b border-border bg-card">
+                <div className="container mx-auto px-4 py-4">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <h1 className="text-3xl font-bold text-foreground">Habit Tracker</h1>
+                            <p className="text-sm text-muted-foreground mt-1">
+                                Welcome back, {user.name || user.email}
+                            </p>
+                        </div>
+                        <SignOutButton />
+                    </div>
                 </div>
-                <HabitForm email={user?.email || ""}/>  
-            </div>
-            
+            </header>
+
+            {/* Main Content */}
+            <main className="container mx-auto px-4 py-8">
+                <div className="space-y-6">
+                    {/* Page Header */}
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <h2 className="text-2xl font-semibold text-foreground">Your Habits</h2>
+                            <div className="flex items-center gap-2 mt-2 text-sm text-muted-foreground">
+                                <Calendar className="h-4 w-4" />
+                                <span>{weekRange}</span>
+                            </div>
+                        </div>
+                        <HabitForm email={user?.email || ""} />
+                    </div>
+
+                    {/* Habits Table */}
+                    <div className="rounded-lg border border-4 p-4 shadow-sm">
+                        <HabitTable />
+                    </div>
+                </div>
+            </main>
         </div>
     )
 } 
