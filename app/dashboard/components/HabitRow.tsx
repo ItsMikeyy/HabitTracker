@@ -2,11 +2,18 @@
 
 import { TableRow, TableCell } from "@/components/ui/table"
 import { Checkbox } from "@/components/ui/checkbox"
-import { useState } from "react"
-import React from "react"
-import { cn } from "@/lib/utils"
+import { useState, useMemo, useEffect } from "react"
 import { ChevronDownIcon, ChevronUpIcon } from "lucide-react"
 import HabitDetails from "./HabitDetails"
+import { getWeekDates } from "@/lib/date"
+
+interface Completion {
+    id: number
+    habitId: number
+    userId: number
+    date: string
+    completedAt: string
+}
 
 interface HabitRowProps {
     habit: {
@@ -19,37 +26,85 @@ interface HabitRowProps {
         currentStreak?: number
         longestStreak?: number
     }
+    completed: Completion[]
 }
 
-export default function HabitRow({habit}: HabitRowProps) {
+export default function HabitRow({habit, completed}: HabitRowProps) {
     const [detailsOpen, setDetailsOpen] = useState(false)
+    const weekDates = getWeekDates(new Date());
 
-    const [checkedDays, setCheckedDays] = useState<Record<string, boolean>>({
-        sunday: false,
-        monday: false,
-        tuesday: false,
-        wednesday: false,
-        thursday: false,
-        friday: false,
-        saturday: false,
-    })
+    // Create a set of completed dates for quick lookup - stable when completed array changes
+    const completedDatesSet = useMemo(() => {
+        return new Set(completed.map(c => c.date))
+    }, [completed])
 
-    const handleDayToggle = (day: string) => {
+    // Create a stable serialized version of completed dates for dependency tracking
+    const completedDatesKey = useMemo(() => {
+        return completed.map(c => c.date).sort().join(',')
+    }, [completed])
+
+    // Compute checkedDays from completed dates
+    const computedCheckedDays = useMemo(() => {
+        return weekDates.reduce((acc, date) => {
+            acc[date] = completedDatesSet.has(date)
+            return acc
+        }, {} as Record<string, boolean>)
+    }, [weekDates.join(','), completedDatesKey]) // Use stable string keys
+
+    // State for optimistic updates during API calls
+    const [checkedDays, setCheckedDays] = useState<Record<string, boolean>>(() => 
+        weekDates.reduce((acc, date) => {
+            acc[date] = completedDatesSet.has(date)
+            return acc
+        }, {} as Record<string, boolean>)
+    )
+
+    // Sync state with completed prop changes (when API calls complete and data refreshes)
+    useEffect(() => {
+        setCheckedDays(computedCheckedDays)
+    }, [computedCheckedDays])
+
+
+    async function handleDayToggle(day: string) {
+        // Capture the previous state before updating
+        const wasChecked = checkedDays[day]
+        const willBeChecked = !wasChecked
+        
         setCheckedDays(prev => ({
             ...prev,
-            [day]: !prev[day]
+            [day]: willBeChecked
         }))
+        
+        if (willBeChecked) {
+            // Being checked 
+            const res = await fetch("/api/habits/complete", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ habitId: habit.id, date: day }),
+            })
+        } else {
+            // Being unchecked
+            const res = await fetch("/api/habits/complete", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ habitId: habit.id, date: day }),
+            })
+        }
     }
 
 
     const days = [
-        { key: 'sunday', label: 'Sun' },
-        { key: 'monday', label: 'Mon' },
-        { key: 'tuesday', label: 'Tue' },
-        { key: 'wednesday', label: 'Wed' },
-        { key: 'thursday', label: 'Thu' },
-        { key: 'friday', label: 'Fri' },
-        { key: 'saturday', label: 'Sat' },
+        { key: weekDates[0], label: 'Sun' },
+        { key: weekDates[1], label: 'Mon' },
+        { key: weekDates[2], label: 'Tue' },
+        { key: weekDates[3], label: 'Wed' },
+        { key: weekDates[4], label: 'Thu' },
+        { key: weekDates[5], label: 'Fri' },
+        { key: weekDates[6], label: 'Sat' },
     ]
 
     return (

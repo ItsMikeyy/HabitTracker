@@ -3,7 +3,7 @@ import SignOutButton from "../components/buttons/SignOutButton";
 import HabitForm from "./components/HabitForm";
 import { redirect } from "next/navigation";
 import HabitTable from "./components/HabitTable";
-import { getWeekRange } from "@/lib/date";
+import { getWeekDates, getWeekRange } from "@/lib/date";
 import { Calendar } from "lucide-react";
 
 export default async function Dashboard() {
@@ -13,7 +13,6 @@ export default async function Dashboard() {
     }
 
     const weekRange = getWeekRange()
-
     return (
         <div className="min-h-screen bg-background">
             {/* Header */}

@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX `unique_habit_date` ON `completionRecords` (`habitId`,`date`);

@@ -1,0 +1,1 @@
+ALTER TABLE `completionRecords` ADD `date` text NOT NULL;

@@ -1,4 +1,4 @@
-import { sqliteTable, integer, text } from "drizzle-orm/sqlite-core";
+import { sqliteTable, integer, text, uniqueIndex } from "drizzle-orm/sqlite-core";
 import { sql } from "drizzle-orm";
 
 export const users = sqliteTable("users", {
@@ -24,3 +24,14 @@ export const habits = sqliteTable("habits", {
     createdAt: integer("createdAt", {mode: "timestamp"}).notNull().default(sql`CURRENT_TIMESTAMP`),
     updatedAt: integer("updatedAt", {mode: "timestamp"}).notNull().default(sql`CURRENT_TIMESTAMP`),
 })
+
+export const completionRecords = sqliteTable("completionRecords", {
+    id: integer("id").primaryKey({autoIncrement: true}),
+    habitId: integer("habitId").references(() => habits.id),
+    userId: integer("userId").references(() => users.id),
+    date: text("date").notNull(),
+    completedAt: integer("completedAt", {mode: "timestamp"}).notNull().default(sql`CURRENT_TIMESTAMP`),
+}, (table) => ({
+        uniqueHabitDate: uniqueIndex("unique_habit_date").on(table.habitId, table.date),
+    }),
+)
