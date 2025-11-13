@@ -6,6 +6,7 @@ import { useState, useMemo, useEffect } from "react"
 import { ChevronDownIcon, ChevronUpIcon } from "lucide-react"
 import HabitDetails from "./HabitDetails"
 import { getWeekDates } from "@/lib/date"
+import { iconComponents, IconName } from "./IconPicker"
 
 interface Completion {
     id: number
@@ -17,7 +18,7 @@ interface Completion {
 
 interface HabitRowProps {
     habit: {
-        id?: number
+        id: number
         name: string
         description?: string
         icon?: string
@@ -26,10 +27,11 @@ interface HabitRowProps {
         currentStreak?: number
         longestStreak?: number
     }
-    completed: Completion[]
+    completed: Completion[],
+    email: string
 }
 
-export default function HabitRow({habit, completed}: HabitRowProps) {
+export default function HabitRow({habit, completed, email}: HabitRowProps) {
     const [detailsOpen, setDetailsOpen] = useState(false)
     const weekDates = getWeekDates(new Date());
 
@@ -118,7 +120,7 @@ export default function HabitRow({habit, completed}: HabitRowProps) {
                             style={{ backgroundColor: habit.color || "#6366f1" }}
                         />
                         
-                        {habit.icon && (
+                        {habit.icon && habit.icon in iconComponents && (
                             <div 
                                 className="flex h-8 w-8 items-center justify-center rounded-md shrink-0"
                                 style={{
@@ -126,6 +128,10 @@ export default function HabitRow({habit, completed}: HabitRowProps) {
                                     color: habit.color || "#6366f1"
                                 }}
                             >
+                                {(() => {
+                                    const IconComponent = iconComponents[habit.icon as IconName]
+                                    return IconComponent ? <IconComponent className="h-5 w-5" /> : null
+                                })()}
                             </div>
                         )}
                         
@@ -165,7 +171,7 @@ export default function HabitRow({habit, completed}: HabitRowProps) {
             {detailsOpen && (
                 <TableRow>
                     <TableCell colSpan={8} className="p-4 bg-muted/30">
-                        <HabitDetails habit={habit} />
+                        <HabitDetails habit={habit} email={email}/>
                     </TableCell>
                 </TableRow>
             )}

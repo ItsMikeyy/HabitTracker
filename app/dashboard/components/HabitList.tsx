@@ -4,7 +4,7 @@ import HabitRow from "./HabitRow"
 import { getStartAndEndDate } from "@/lib/date"
 
 interface Habit {
-    id?: number
+    id: number
     name: string
     description?: string
     icon?: string
@@ -22,7 +22,7 @@ interface Completion {
     completedAt: string
 }
 
-export function HabitList() {
+export function HabitList(props: { email: string}) {
     const [habits, setHabits] = useState<Habit[]>([])
     const [completions, setCompletions] = useState<Completion[]>([])
     
@@ -48,6 +48,8 @@ export function HabitList() {
                     key={habit.id} 
                     habit={habit} 
                     completed={completions.filter(c => c.habitId === habit.id)}
+                    email={props.email} 
+                    
                 />
             ))}
         </>

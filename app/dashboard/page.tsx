@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import HabitTable from "./components/HabitTable";
 import { getWeekDates, getWeekRange } from "@/lib/date";
 import { Calendar } from "lucide-react";
+import IconPicker from "./components/IconPicker";
 
 export default async function Dashboard() {
     const user = await getUserSession()
@@ -47,7 +48,7 @@ export default async function Dashboard() {
 
                     {/* Habits Table */}
                     <div className="rounded-lg border border-4 p-4 shadow-sm">
-                        <HabitTable />
+                        <HabitTable email={user?.email || ""} />
                     </div>
                 </div>
             </main>

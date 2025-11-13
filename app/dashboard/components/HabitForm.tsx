@@ -6,26 +6,59 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectGroup, SelectLabel, SelectItem } from "@/components/ui/select";
 import { useState } from "react";
+import IconPicker from "./IconPicker";
+import { HighlighterIcon } from "lucide-react";
 
-export default function HabitForm(props: { email: string }) {
-    const [formData, setFormData] = useState({ name: "", description: "", icon: "", color: "#000000", frequency: "daily" })
+interface Habit {
+    name?: string,
+    description?: string,
+    icon?: string,
+    color?: string,
+    frequency?: string
+    id: Number
+}
+
+export default function HabitForm(props: { email: string, habit?: Habit,}) {
+    const habit = props.habit
+    const [formData, setFormData] = useState({ name: habit?.name ?? "", description: habit?.description ?? "", icon: habit?.icon ?? "", color: habit?.color ?? "", frequency: habit?.frequency ?? "" })
     const [open, setOpen] = useState(false);
     
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        console.log("EMAIL", props.email)
-        const res = await fetch("/api/habits", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({...formData, userEmail: props.email})
-        })
-        
+        try {
+            if (habit) {
+                var res = await fetch("/api/habits", {
+                    method:"PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({...formData, userEmail: props.email, id: habit.id})
+                })
+            }
+            else {
+                var res = await fetch("/api/habits", {
+                    method:"POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({...formData, userEmail: props.email})
+                })
+            }
+
+           
+            
+            if (res.ok) {
+                // Reset form and close dialog
+                setFormData({ name: "", description: "", icon: "", color: "#000000", frequency: "daily" })
+                setOpen(false)
+                // Reload the page to refresh the habit list
+                window.location.reload()
+            }
+        } catch (error) {
+            console.error("Error creating habit:", error)
+        }
     }
     
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <button className="bg-blue-500 text-white p-2 rounded-md">Add Habit</button>
+                {habit ? <HighlighterIcon color="#9f9fa9" className="cursor-pointer"/> : <button className="bg-blue-500 text-white p-2 rounded-md">Add Habit</button> }
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <form onSubmit={handleSubmit}>
@@ -56,11 +89,11 @@ export default function HabitForm(props: { email: string }) {
                         </div>
                         <div className="grid gap-3">
                             <Label htmlFor="icon">Icon</Label>
-                            <Input 
-                                id="icon" 
-                                name="icon"
+                            <IconPicker
                                 value={formData.icon}
-                                onChange={(e) => setFormData({...formData, icon: e.target.value})}
+                                onChange={(iconName) => setFormData({...formData, icon: iconName})}
+                                color={formData.color}
+                        
                             />
                         </div>
                         <div className="grid gap-3">

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { getUserHabits, insertHabit } from "@/lib/data/habits"
+import { getUserHabits, insertHabit, updateHabit } from "@/lib/data/habits"
 import { getUserIdByEmail } from "@/lib/data/users"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
@@ -45,4 +45,14 @@ export async function GET(req: Request) {
     
     const completedHabits = await getHabitCompletions(dates, userId)
     return NextResponse.json({ habits, completedHabits }, { status: 200 })
+}
+
+export async function PATCH(req: Request) {
+    const data = await req.json()
+    const userId = await getUserIdByEmail(data.userEmail)
+    if (!userId) {
+        return NextResponse.json({ error: "User not found" }, { status: 404 })
+    }
+    await updateHabit({...data, userId: userId}, data.id)
+    return NextResponse.json({ message: "Habit updated successfully" }, { status: 200 })
 }

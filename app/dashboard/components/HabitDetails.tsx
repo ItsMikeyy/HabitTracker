@@ -1,6 +1,7 @@
 "use client"
 
-import { Flame, Trophy, Calendar } from "lucide-react"
+import { Flame, Trophy, Calendar, HighlighterIcon } from "lucide-react"
+import HabitForm from "./HabitForm"
 
 interface HabitDetailsProps {
     habit: {
@@ -9,10 +10,20 @@ interface HabitDetailsProps {
         longestStreak?: number
         frequency?: string
         color?: string
+        id: number
     }
+    email: string
 }
 
-export default function HabitDetails({ habit }: HabitDetailsProps) {
+interface Habit {
+    name?: string,
+    description?: string,
+    icon?: string,
+    color?: string,
+    frequency?: string
+}
+
+export default function HabitDetails({ habit, email, }: HabitDetailsProps) {
     const frequencyLabel = habit.frequency 
         ? habit.frequency.charAt(0).toUpperCase() + habit.frequency.slice(1) 
         : ""
@@ -22,9 +33,12 @@ export default function HabitDetails({ habit }: HabitDetailsProps) {
             {/* Description */}
             {habit.description && (
                 <div className="space-y-2">
-                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                        Description
-                    </p>
+                    <div className="flex w-full justify-between"> 
+                        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                            Description
+                        </p>
+                        <HabitForm email={email} habit={habit} />
+                    </div>
                     <p className="text-sm text-foreground leading-relaxed">
                         {habit.description}
                     </p>

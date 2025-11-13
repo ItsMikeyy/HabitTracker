@@ -1,7 +1,8 @@
 import { Table, TableCaption, TableHeader, TableBody, TableFooter, TableHead, TableRow, TableCell } from "@/components/ui/table";
 import { HabitList } from "./HabitList";
+import { getUserSession } from "@/lib/session";
 
-export default function HabitTable() {
+export default function HabitTable(props: { email: string}) {
     return (
         <Table>
             <TableHeader>
@@ -17,7 +18,7 @@ export default function HabitTable() {
                 </TableRow>
             </TableHeader>
             <TableBody>
-                <HabitList />
+                <HabitList email={props.email}/>
             </TableBody>
         </Table>
     )
