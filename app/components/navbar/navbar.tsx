@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { Target } from "lucide-react";
 import AuthButtons from "./AuthButtons";
+import NavLinks from "./NavLinks";
 
 export default function NavBar() {
   return (
@@ -16,13 +16,8 @@ export default function NavBar() {
               </div>
               <span className="text-2xl font-bold text-foreground">Habits</span>
             </Link>
-            
-            <div className="hidden md:flex items-center gap-6">
-              <Link href="/" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Home</Link>
-              <Link href="#about" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">About</Link>
-              <Link href="#features" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Features</Link>
-              <Link href="#contact" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Contact</Link>
-            </div>
+            <NavLinks />
+           
           </div>
 
           {/* Auth Buttons */}

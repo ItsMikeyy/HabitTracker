@@ -1,11 +1,9 @@
 import { getUserSession } from "@/lib/session";
-import SignOutButton from "../components/buttons/SignOutButton";
 import HabitForm from "./components/HabitForm";
 import { redirect } from "next/navigation";
 import HabitTable from "./components/HabitTable";
-import { getWeekDates, getWeekRange } from "@/lib/date";
+import { getWeekRange } from "@/lib/date";
 import { Calendar } from "lucide-react";
-import IconPicker from "./components/IconPicker";
 
 export default async function Dashboard() {
     const user = await getUserSession()
@@ -16,25 +14,9 @@ export default async function Dashboard() {
     const weekRange = getWeekRange()
     return (
         <div className="min-h-screen bg-background">
-            {/* Header */}
-            <header className="border-b border-border bg-card">
-                <div className="container mx-auto px-4 py-4">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <h1 className="text-3xl font-bold text-foreground">Habit Tracker</h1>
-                            <p className="text-sm text-muted-foreground mt-1">
-                                Welcome back, {user.name || user.email}
-                            </p>
-                        </div>
-                        <SignOutButton />
-                    </div>
-                </div>
-            </header>
-
-            {/* Main Content */}
             <main className="container mx-auto px-4 py-8">
                 <div className="space-y-6">
-                    {/* Page Header */}
+                    <h1 className="text-3xl font-semibold pb-3">Welcome {user.name || user.email}</h1>
                     <div className="flex items-center justify-between">
                         <div>
                             <h2 className="text-2xl font-semibold text-foreground">Your Habits</h2>
@@ -43,12 +25,12 @@ export default async function Dashboard() {
                                 <span>{weekRange}</span>
                             </div>
                         </div>
-                        <HabitForm email={user?.email || ""} />
+                        <HabitForm />
                     </div>
 
                     {/* Habits Table */}
-                    <div className="rounded-lg border border-4 p-4 shadow-sm">
-                        <HabitTable email={user?.email || ""} />
+                    <div className="rounded-lg border p-4 shadow-sm">
+                        <HabitTable />
                     </div>
                 </div>
             </main>

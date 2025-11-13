@@ -4,25 +4,28 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectGroup, SelectLabel, SelectItem } from "@/components/ui/select";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectGroup, SelectItem } from "@/components/ui/select";
 import { useState } from "react";
 import IconPicker from "./IconPicker";
 import { HighlighterIcon } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 interface Habit {
-    name?: string,
-    description?: string,
-    icon?: string,
-    color?: string,
+    id?: number
+    name?: string
+    description?: string
+    icon?: string
+    color?: string
     frequency?: string
-    id: Number
+    currentStreak?: number
+    longestStreak?: number
 }
 
-export default function HabitForm(props: { email: string, habit?: Habit,}) {
+export default function HabitForm(props: { habit?: Habit,}) {
     const habit = props.habit
     const [formData, setFormData] = useState({ name: habit?.name ?? "", description: habit?.description ?? "", icon: habit?.icon ?? "", color: habit?.color ?? "", frequency: habit?.frequency ?? "" })
     const [open, setOpen] = useState(false);
-    
+    const { data: session } = useSession()
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         try {
@@ -30,14 +33,14 @@ export default function HabitForm(props: { email: string, habit?: Habit,}) {
                 var res = await fetch("/api/habits", {
                     method:"PATCH",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({...formData, userEmail: props.email, id: habit.id})
+                    body: JSON.stringify({...formData, userEmail: session?.user?.email, id: habit.id})
                 })
             }
             else {
                 var res = await fetch("/api/habits", {
                     method:"POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({...formData, userEmail: props.email})
+                    body: JSON.stringify({...formData, userEmail: session?.user?.email})
                 })
             }
 

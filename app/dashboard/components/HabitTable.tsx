@@ -1,24 +1,23 @@
-import { Table, TableCaption, TableHeader, TableBody, TableFooter, TableHead, TableRow, TableCell } from "@/components/ui/table";
+import { Table, TableHeader, TableBody, TableHead, TableRow, } from "@/components/ui/table";
 import { HabitList } from "./HabitList";
-import { getUserSession } from "@/lib/session";
 
-export default function HabitTable(props: { email: string}) {
+export default function HabitTable() {
     return (
         <Table>
             <TableHeader>
                 <TableRow>
                     <TableHead className="w-[100px]">Habit</TableHead>
-                    <TableHead>Sun</TableHead>
-                    <TableHead>Mon</TableHead>
-                    <TableHead>Tue</TableHead>
-                    <TableHead>Wed</TableHead>
-                    <TableHead>Thu</TableHead>
-                    <TableHead>Fri</TableHead>
-                    <TableHead>Sat</TableHead>
+                    <TableHead className="text-center">Sun</TableHead>
+                    <TableHead className="text-center">Mon</TableHead>
+                    <TableHead className="text-center">Tue</TableHead>
+                    <TableHead className="text-center">Wed</TableHead>
+                    <TableHead className="text-center">Thu</TableHead>
+                    <TableHead className="text-center">Fri</TableHead>
+                    <TableHead className="text-center">Sat</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
-                <HabitList email={props.email}/>
+                <HabitList />
             </TableBody>
         </Table>
     )

@@ -7,31 +7,15 @@ import { ChevronDownIcon, ChevronUpIcon } from "lucide-react"
 import HabitDetails from "./HabitDetails"
 import { getWeekDates } from "@/lib/date"
 import { iconComponents, IconName } from "./IconPicker"
-
-interface Completion {
-    id: number
-    habitId: number
-    userId: number
-    date: string
-    completedAt: string
-}
+import { Habit } from "@/types/Habit"
+import { CompletionRecord } from "@/types/CompletionRecord"
 
 interface HabitRowProps {
-    habit: {
-        id: number
-        name: string
-        description?: string
-        icon?: string
-        color?: string
-        frequency: string
-        currentStreak?: number
-        longestStreak?: number
-    }
-    completed: Completion[],
-    email: string
+    habit: Habit
+    completed: CompletionRecord[]
 }
 
-export default function HabitRow({habit, completed, email}: HabitRowProps) {
+export default function HabitRow({habit, completed}: HabitRowProps) {
     const [detailsOpen, setDetailsOpen] = useState(false)
     const weekDates = getWeekDates(new Date());
 
@@ -171,7 +155,7 @@ export default function HabitRow({habit, completed, email}: HabitRowProps) {
             {detailsOpen && (
                 <TableRow>
                     <TableCell colSpan={8} className="p-4 bg-muted/30">
-                        <HabitDetails habit={habit} email={email}/>
+                        <HabitDetails habit={habit} />
                     </TableCell>
                 </TableRow>
             )}

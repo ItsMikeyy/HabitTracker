@@ -1,11 +1,9 @@
 import { AlarmCheck, ChartArea, Target } from "lucide-react";
 import Hero from "./components/hero/hero";
-import NavBar from "./components/navbar/navbar";
 
 export default function Home() {
   return (
    <div className="w-full">
-    <NavBar />
     <Hero />
     <div className="mt-16 flex justify-around">
       <div className="bg-blue-500 w-full">

@@ -2,28 +2,13 @@
 
 import { Flame, Trophy, Calendar, HighlighterIcon } from "lucide-react"
 import HabitForm from "./HabitForm"
+import { Habit } from "@/types/Habit"
 
-interface HabitDetailsProps {
-    habit: {
-        description?: string
-        currentStreak?: number
-        longestStreak?: number
-        frequency?: string
-        color?: string
-        id: number
-    }
-    email: string
-}
 
-interface Habit {
-    name?: string,
-    description?: string,
-    icon?: string,
-    color?: string,
-    frequency?: string
-}
 
-export default function HabitDetails({ habit, email, }: HabitDetailsProps) {
+
+export default function HabitDetails(props: {habit: Habit}) {
+    const habit = props.habit
     const frequencyLabel = habit.frequency 
         ? habit.frequency.charAt(0).toUpperCase() + habit.frequency.slice(1) 
         : ""
@@ -37,7 +22,7 @@ export default function HabitDetails({ habit, email, }: HabitDetailsProps) {
                         <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                             Description
                         </p>
-                        <HabitForm email={email} habit={habit} />
+                        <HabitForm habit={habit} />
                     </div>
                     <p className="text-sm text-foreground leading-relaxed">
                         {habit.description}

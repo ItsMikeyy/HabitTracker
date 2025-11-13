@@ -1,6 +1,6 @@
 import { db } from "@/db";
 import { completionRecords } from "@/db/schemas";
-import { and, eq, lte, gte } from "drizzle-orm";
+import { and, eq, lte, gte, desc } from "drizzle-orm";
 
 export async function markHabitCompleted(habitId: number, userId: number, date: string) {
     await db.insert(completionRecords).values({
@@ -25,3 +25,13 @@ export async function getHabitCompletions(dates: string[], userId: number) {
         lte(completionRecords.date, endDate)))
     return result
 }
+
+// async function calculateStreak(habitId: number, userId: number, date: string) {
+//     const habits = await db.select().from(completionRecords).where(and
+//         (
+//             eq(completionRecords.habitId, habitId),
+//             eq(completionRecords.userId, userId),
+//             lte(completionRecords.date, date)
+//         )).orderBy(desc(completionRecords.date))
+
+// }

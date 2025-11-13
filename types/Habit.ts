@@ -1,8 +1,10 @@
 export type Habit = {
-    name: string;
-    description: string;
-    icon: string;
-    color: string;
-    frequency: string;
-    userId: number;
+    id?: number
+    name?: string
+    description?: string
+    icon?: string
+    color?: string
+    frequency?: string
+    currentStreak?: number
+    longestStreak?: number
 }

@@ -1,5 +1,4 @@
 "use client"
-
 import { useState, useRef, useEffect } from "react"
 import {
     Dumbbell,
@@ -63,6 +62,8 @@ interface IconPickerProps {
 export default function IconPicker({ value, onChange, className, color }: IconPickerProps) {
     const [isOpen, setIsOpen] = useState(false)
     const containerRef = useRef<HTMLDivElement>(null)
+
+
     
     // Close popover when clicking outside
     useEffect(() => {
