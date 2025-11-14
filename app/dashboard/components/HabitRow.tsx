@@ -5,7 +5,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { useState, useMemo, useEffect } from "react"
 import { ChevronDownIcon, ChevronUpIcon } from "lucide-react"
 import HabitDetails from "./HabitDetails"
-import { getWeekDates } from "@/lib/date"
+import { getTodayDate, getWeekDates } from "@/lib/date"
 import { iconComponents, IconName } from "./IconPicker"
 import { Habit } from "@/types/Habit"
 import { CompletionRecord } from "@/types/CompletionRecord"
@@ -13,9 +13,10 @@ import { CompletionRecord } from "@/types/CompletionRecord"
 interface HabitRowProps {
     habit: Habit
     completed: CompletionRecord[]
+    date: string
 }
 
-export default function HabitRow({habit, completed}: HabitRowProps) {
+export default function HabitRow({habit, completed, date}: HabitRowProps) {
     const [detailsOpen, setDetailsOpen] = useState(false)
     const weekDates = getWeekDates(new Date());
 
@@ -82,7 +83,6 @@ export default function HabitRow({habit, completed}: HabitRowProps) {
         }
     }
 
-
     const days = [
         { key: weekDates[0], label: 'Sun' },
         { key: weekDates[1], label: 'Mon' },
@@ -145,8 +145,10 @@ export default function HabitRow({habit, completed}: HabitRowProps) {
                                 checked={checkedDays[day.key]}
                                 onCheckedChange={() => handleDayToggle(day.key)}
                                 color={habit.color}
+                                disabled={new Date(date) <= new Date(day.key)}
                                 className="cursor-pointer transition-all hover:scale-110"
                             />
+                            
                         </div>
                     </TableCell>
                 ))}

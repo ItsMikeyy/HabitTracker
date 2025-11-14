@@ -1,13 +1,15 @@
 "use client"
 import { useEffect, useState } from "react"
 import HabitRow from "./HabitRow"
-import { getStartAndEndDate } from "@/lib/date"
+import { getStartAndEndDate, getTodayDate } from "@/lib/date"
 import { Habit } from "@/types/Habit"
 import { CompletionRecord } from "@/types/CompletionRecord"
 
 export function HabitList() {
     const [habits, setHabits] = useState<Habit[]>([])
     const [completions, setCompletions] = useState<CompletionRecord[]>([])
+    const today = getTodayDate(new Date())
+
     
     useEffect(() => {
         async function getHabits() {
@@ -27,6 +29,7 @@ export function HabitList() {
             {habits.map((habit) => (
                 <HabitRow 
                     key={habit.id} 
+                    date={today}
                     habit={habit} 
                     completed={completions.filter(c => c.habitId === habit.id)}
                 />

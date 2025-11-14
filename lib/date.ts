@@ -1,3 +1,5 @@
+
+
 /**
  * Formats a date as YYYY-MM-DD in local timezone (not UTC)
  * This prevents timezone shifts when converting dates
@@ -40,10 +42,14 @@ export function getStartAndEndDate(date: Date) {
 
 export function getWeekDates(date: Date) {
     const sunday = new Date(date);
-    sunday.setDate(date.getDate() - date.getDay()); // get Sunday
+    sunday.setDate(date.getDate() - date.getDay()); 
     return Array.from({ length: 7 }, (_, i) => {
         const d = new Date(sunday);
         d.setDate(sunday.getDate() + i);
-        return formatDateLocal(d); // e.g. "2025-11-09"
+        return formatDateLocal(d); 
   });
+}
+
+export function getTodayDate(date: Date) {
+  return formatDateLocal(date)
 }
