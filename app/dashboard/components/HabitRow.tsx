@@ -145,7 +145,7 @@ export default function HabitRow({habit, completed, date}: HabitRowProps) {
                                 checked={checkedDays[day.key]}
                                 onCheckedChange={() => handleDayToggle(day.key)}
                                 color={habit.color}
-                                disabled={new Date(date) <= new Date(day.key)}
+                                disabled={new Date(date) < new Date(day.key)}
                                 className="cursor-pointer transition-all hover:scale-110"
                             />
                             

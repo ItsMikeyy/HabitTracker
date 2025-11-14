@@ -60,7 +60,7 @@ export async function PATCH(req: Request) {
 export async function DELETE(req: Request) {
     const session = await getServerSession();
     const data = await req.json()
-
+    console.log(session)
     const userId = await getUserIdByEmail(session?.user?.email as string)
 
     if (!userId) {

@@ -2,15 +2,15 @@ import { getUserSession } from "@/lib/session";
 import HabitForm from "./components/HabitForm";
 import { redirect } from "next/navigation";
 import HabitTable from "./components/HabitTable";
-import { getWeekRange } from "@/lib/date";
+import { getTodayDate, getWeekRange } from "@/lib/date";
 import { Calendar } from "lucide-react";
+import { calculateStreak } from "@/lib/data/completions";
 
 export default async function Dashboard() {
     const user = await getUserSession()
     if (!user) {
         redirect("/api/auth/signin")
     }
-
     const weekRange = getWeekRange()
     return (
         <div className="min-h-screen bg-background">
