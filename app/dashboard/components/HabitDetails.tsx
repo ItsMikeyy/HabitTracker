@@ -1,6 +1,6 @@
 "use client"
 
-import { Flame, Trophy, Calendar, HighlighterIcon } from "lucide-react"
+import { Flame, Trophy, Calendar, HighlighterIcon, DeleteIcon, Trash2Icon } from "lucide-react"
 import HabitForm from "./HabitForm"
 import { Habit } from "@/types/Habit"
 
@@ -12,6 +12,17 @@ export default function HabitDetails(props: {habit: Habit}) {
     const frequencyLabel = habit.frequency 
         ? habit.frequency.charAt(0).toUpperCase() + habit.frequency.slice(1) 
         : ""
+    
+        async function deleteHabit() {
+            const res = await fetch("api/habits", {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({habitId: habit.id})
+            })
+            if (res.ok) {
+                window.location.reload()
+            }
+        }
 
     return (
         <div className="space-y-4">
@@ -22,7 +33,10 @@ export default function HabitDetails(props: {habit: Habit}) {
                         <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                             Description
                         </p>
-                        <HabitForm habit={habit} />
+                        <div className="flex items-center gap-4">
+                            <HabitForm habit={habit} />
+                            <Trash2Icon color="red" className="cursor-pointer" onClick={() => deleteHabit()}/>
+                        </div>
                     </div>
                     <p className="text-sm text-foreground leading-relaxed">
                         {habit.description}

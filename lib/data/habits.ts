@@ -4,6 +4,10 @@ import { habits, } from "@/db/schemas"
 import { eq, and } from "drizzle-orm";
 
 export async function insertHabit(habit: Habit) {
+    if (!habit.userId || !habit.name || !habit.icon || !habit.color || !habit.frequency) {
+        throw new Error("Missing required habit fields.");
+    }
+
     try {
         await db.insert(habits).values({
             userId: habit.userId,
@@ -19,6 +23,9 @@ export async function insertHabit(habit: Habit) {
     
 }
 export async function updateHabit(habit: Habit, id: number) {
+    if (!habit.userId || !habit.name || !habit.icon || !habit.color || !habit.frequency) {
+        throw new Error("Missing required habit fields.");
+    }
     try {
         await db.update(habits).set({
             userId: habit.userId,
@@ -40,4 +47,8 @@ export async function getUserHabits(id: number) {
         return []
     }
     return userHabits
+}
+
+export async function deleteHabit(habitId: number, userId: number) {
+    await db.delete(habits).where(and(eq(habits.id, habitId), eq(habits.userId, userId)))
 }

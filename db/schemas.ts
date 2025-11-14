@@ -12,7 +12,7 @@ export const users = sqliteTable("users", {
 
 export const habits = sqliteTable("habits", {
     id: integer("id").primaryKey({autoIncrement: true}),
-    userId: integer("userId").references(() => users.id),
+    userId: integer("userId").notNull().references(() => users.id),
     name: text("name").notNull(),
     description: text("description"),
     icon: text("icon").notNull(),
@@ -27,7 +27,7 @@ export const habits = sqliteTable("habits", {
 
 export const completionRecords = sqliteTable("completionRecords", {
     id: integer("id").primaryKey({autoIncrement: true}),
-    habitId: integer("habitId").references(() => habits.id),
+    habitId: integer("habitId").references(() => habits.id, { onDelete: "cascade" }),
     userId: integer("userId").references(() => users.id),
     date: text("date").notNull(),
     completedAt: integer("completedAt", {mode: "timestamp"}).notNull().default(sql`CURRENT_TIMESTAMP`),
