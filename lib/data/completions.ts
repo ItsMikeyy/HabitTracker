@@ -1,7 +1,7 @@
 import { db } from "@/db";
 import { completionRecords, habits } from "@/db/schemas";
 import { and, eq, lte, gte, desc } from "drizzle-orm";
-import { getTodayDate } from "../date";
+import { getTodayDate, parseDateLocal } from "../date";
 import { updateHabit } from "./habits";
 
 export async function markHabitCompleted(habitId: number, userId: number, date: string) {
@@ -48,12 +48,12 @@ export async function calculateStreak(habitId: number, userId: number) {
 
     // Count consecutive days backwards from today
     let currentStreak = 0
-    let currentDate = new Date(today)
+    let currentDate = parseDateLocal(today)
     
 
     // Count consecutive days backwards
     while (true) {
-        console.log(currentDate)
+        console.log("CURRENT", currentDate)
         const dateStr = getTodayDate(currentDate)
         console.log(dateStr)
         if (completionDates.has(dateStr)) {
