@@ -13,15 +13,15 @@ export function parseDateLocal(dateString: string): Date {
     return new Date(year, month - 1, day);
 }
 
-export function getWeekRange() {
-    const today = new Date();
-    const dayofWeek = today.getDay()
+export function getWeekRange(date: Date) {
+    
+    const dayofWeek = date.getDay()
 
-    const sunday = new Date(today)
-    sunday.setDate(today.getDate() - dayofWeek);
+    const sunday = new Date(date)
+    sunday.setDate(date.getDate() - dayofWeek);
 
-    const saturday = new Date(today)
-    saturday.setDate(today.getDate() + (6-dayofWeek))
+    const saturday = new Date(date)
+    saturday.setDate(date.getDate() + (6-dayofWeek))
 
     const options: Intl.DateTimeFormatOptions = {month: "short", day: "numeric"}
     const start = sunday.toLocaleDateString("en-US", options)
