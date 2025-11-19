@@ -28,15 +28,13 @@ export async function GET(req: Request) {
     }
     const habits = await getUserHabits(userId)
 
-    // Get date range from query params if provided (client's local timezone)
-    // Otherwise fall back to server's date calculation
+
     const url = new URL(req.url)
     const startDate = url.searchParams.get('startDate')
     const endDate = url.searchParams.get('endDate')
     
     let dates: string[]
     if (startDate && endDate) {
-        // Use dates from client (in client's local timezone)
         dates = [startDate, endDate]
     } else {
         // Fallback to server calculation (shouldn't normally happen)
@@ -60,7 +58,6 @@ export async function PATCH(req: Request) {
 export async function DELETE(req: Request) {
     const session = await getServerSession();
     const data = await req.json()
-    console.log(session)
     const userId = await getUserIdByEmail(session?.user?.email as string)
 
     if (!userId) {

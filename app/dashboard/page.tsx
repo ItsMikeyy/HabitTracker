@@ -3,6 +3,7 @@ import HabitForm from "./components/HabitForm";
 import { redirect } from "next/navigation";
 import HabitTable from "./components/HabitTable";
 import DateRange from "./components/DateRange";
+import ToDoList from "./components/todo_list/ToDoList";
 
 
 export default async function Dashboard() {
@@ -17,7 +18,7 @@ export default async function Dashboard() {
                     <h1 className="text-3xl font-semibold pb-3">Welcome {user.name || user.email}</h1>
                     <div className="flex items-center justify-between">
                         <div>
-                            <h2 className="text-2xl font-semibold text-foreground">Your Habits</h2>
+                            <h2 className="text-2xl font-semibold text-foreground">Your Daily Habits</h2>
                             <DateRange />
                         </div>
                         <HabitForm />
@@ -26,6 +27,7 @@ export default async function Dashboard() {
                     <div className="rounded-lg border p-4 shadow-sm">
                         <HabitTable />
                     </div>
+                    <ToDoList />
                 </div>
             </main>
         </div>

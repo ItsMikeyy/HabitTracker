@@ -5,7 +5,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { useState, useMemo, useEffect } from "react"
 import { ChevronDownIcon, ChevronUpIcon } from "lucide-react"
 import HabitDetails from "./HabitDetails"
-import { getTodayDate, getWeekDates } from "@/lib/date"
+import { getTodayDate, getWeekDates, newFormat } from "@/lib/date"
 import { iconComponents, IconName } from "./IconPicker"
 import { Habit } from "@/types/Habit"
 import { CompletionRecord } from "@/types/CompletionRecord"
@@ -14,9 +14,10 @@ interface HabitRowProps {
     habit: Habit
     completed: CompletionRecord[]
     date: string
+    onCompletionChange?: () => void
 }
 
-export default function HabitRow({habit, completed, date}: HabitRowProps) {
+export default function HabitRow({habit, completed, date, onCompletionChange}: HabitRowProps) {
     const [detailsOpen, setDetailsOpen] = useState(false)
     const weekDates = getWeekDates(new Date());
 
@@ -24,7 +25,6 @@ export default function HabitRow({habit, completed, date}: HabitRowProps) {
     const completedDatesSet = useMemo(() => {
         return new Set(completed.map(c => c.date))
     }, [completed])
-
     // Create a stable serialized version of completed dates for dependency tracking
     const completedDatesKey = useMemo(() => {
         return completed.map(c => c.date).sort().join(',')
@@ -62,24 +62,38 @@ export default function HabitRow({habit, completed, date}: HabitRowProps) {
             [day]: willBeChecked
         }))
         
-        if (willBeChecked) {
-            // Being checked 
-            const res = await fetch("/api/habits/complete", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ habitId: habit.id, date: day }),
-            })
-        } else {
-            // Being unchecked
-            const res = await fetch("/api/habits/complete", {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ habitId: habit.id, date: day }),
-            })
+        try {
+            if (willBeChecked) {
+                // Being checked 
+                const res = await fetch("/api/habits/complete", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ habitId: habit.id, date: day }),
+                })
+                if (res.ok && onCompletionChange) {
+                    onCompletionChange()
+                }
+            } else {
+                // Being unchecked
+                const res = await fetch("/api/habits/complete", {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ habitId: habit.id, date: day }),
+                })
+                if (res.ok && onCompletionChange) {
+                    onCompletionChange()
+                }
+            }
+        } catch (error) {
+            // Revert optimistic update on error
+            setCheckedDays(prev => ({
+                ...prev,
+                [day]: wasChecked
+            }))
         }
     }
 

@@ -5,7 +5,7 @@ import { getTodayDate, parseDateLocal } from "../date";
 import { updateHabit } from "./habits";
 
 export async function markHabitCompleted(habitId: number, userId: number, date: string) {
-    console.log("INSERT",date)
+    console.log(date)
     await db.insert(completionRecords).values({
         habitId: habitId,
         userId: userId,
@@ -53,9 +53,7 @@ export async function calculateStreak(habitId: number, userId: number) {
 
     // Count consecutive days backwards
     while (true) {
-        console.log("CURRENT", currentDate)
         const dateStr = getTodayDate(currentDate)
-        console.log(dateStr)
         if (completionDates.has(dateStr)) {
             currentStreak++
             currentDate.setDate(currentDate.getDate() - 1)
