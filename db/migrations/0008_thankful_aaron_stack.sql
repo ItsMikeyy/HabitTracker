@@ -1,0 +1,1 @@
+ALTER TABLE `todoLists` ADD `data` text NOT NULL;

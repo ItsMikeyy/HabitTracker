@@ -50,6 +50,20 @@
       "when": 1763080729700,
       "tag": "0006_overconfident_rattler",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1763596532362,
+      "tag": "0007_rapid_purifiers",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1763597551888,
+      "tag": "0008_thankful_aaron_stack",
+      "breakpoints": true
     }
   ]
 }

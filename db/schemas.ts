@@ -35,3 +35,12 @@ export const completionRecords = sqliteTable("completionRecords", {
         uniqueHabitDate: uniqueIndex("unique_habit_date").on(table.habitId, table.date),
     }),
 )
+
+export const todoLists = sqliteTable("todoLists", {
+    id: integer("id").primaryKey({autoIncrement: true}),
+    userId: integer("userId").references(() => users.id),
+    name: text("name").notNull(),
+    data: text("data").notNull(),
+    createdAt: integer("createdAt", {mode: "timestamp"}).notNull().default(sql`CURRENT_TIMESTAMP`),
+    updatedAt: integer("updatedAt", {mode: "timestamp"}).notNull().default(sql`CURRENT_TIMESTAMP`),
+});
