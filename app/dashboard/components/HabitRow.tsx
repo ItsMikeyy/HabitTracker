@@ -9,7 +9,8 @@ import { getTodayDate, getWeekDates, newFormat } from "@/lib/date"
 import { iconComponents, IconName } from "./IconPicker"
 import { Habit } from "@/types/Habit"
 import { CompletionRecord } from "@/types/CompletionRecord"
-
+import { useDate } from "@/app/context/DateContext"
+import { formatDateLocal } from "@/lib/date"
 interface HabitRowProps {
     habit: Habit
     completed: CompletionRecord[]
@@ -18,9 +19,11 @@ interface HabitRowProps {
 }
 
 export default function HabitRow({habit, completed, date, onCompletionChange}: HabitRowProps) {
+    const { date: weekDate } = useDate()
     const [detailsOpen, setDetailsOpen] = useState(false)
-    const weekDates = getWeekDates(new Date());
-
+    const weekDates = getWeekDates(weekDate);
+    const today = formatDateLocal(new Date())
+    console.log(date)
     // Create a set of completed dates for quick lookup - stable when completed array changes
     const completedDatesSet = useMemo(() => {
         return new Set(completed.map(c => c.date))
@@ -107,6 +110,7 @@ export default function HabitRow({habit, completed, date, onCompletionChange}: H
         { key: weekDates[6], label: 'Sat' },
     ]
 
+
     return (
         <>
             <TableRow className="hover:bg-muted/50 transition-colors">
@@ -159,7 +163,7 @@ export default function HabitRow({habit, completed, date, onCompletionChange}: H
                                 checked={checkedDays[day.key]}
                                 onCheckedChange={() => handleDayToggle(day.key)}
                                 color={habit.color}
-                                disabled={new Date(date) < new Date(day.key)}
+                                disabled={new Date(today) < new Date(day.key)}
                                 className="cursor-pointer transition-all hover:scale-110"
                             />
                             
